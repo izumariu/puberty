@@ -1,0 +1,69 @@
+PUBERTY
+
+
+PURPOSE.
+This language's code is supposed to resemble a pubertal masturbation procedure.
+It is not intended to find use in public business.
+The language was written to explore a new way of programming.
+
+
+FUNCTIONAL PRINCIPLE.
+The program begins by stating the date and the time, then the person is introduced,
+and the kinks are listed, arousement level strongest to weakest. After that short
+intro, the real code follows.
+There are 6 byte-sized registers(A,B,C,D,E,F), all starting with value 0, which are used to manipulate data,
+and a register pointer(called REGPTR), which is initialized with 0.
+After an instruction is executed, the following code is executed: `REGPTR%=6 ; REGISTERS[REGPTR]%=256`.
+
+
+INTRO.
+First comes the date sentence. American date notation is used; the time zone is GMT.
+Example:
+
+  It is August 15, 2018, 04:32:06 PM.
+
+This initializes $D to 1534350732(the Unix timestamp of the date)%256.
+
+Second sentence uses the pattern `<CHARACTER> is in his bed, bored.`
+Example:
+
+  Izu is in his bed, bored.
+
+This initializes $C to 3, the character count of the character's name.
+
+Third sentence uses the pattern `(His|Her|Their) secret (kink is|kinks are) <kink1>(, <kinks>).`
+Example:
+
+  His secret kinks are fatfurs, inflation, growth and kitsunes.
+
+Now the word "fatfur" = 5, "inflation" = 4, "growth" = 3 and "kitsunes" = 2.
+This'll come in handy soon.
+
+Fourth sentence(optional) uses the pattern `(Suddenly|Then) ((he|she) spots|they spot) <kink>.`
+!The matching personal pronoun from sentence 3 MUST be used here!
+Example:
+
+  Suddenly he spots fatfurs.
+
+This initializes $A to 2^<kink>; so in this case $A=2^5=32.
+If this sentence is left out, $A=0.
+
+Fifth sentence is "(Suddenly|Then|Soon) the following sounds become audible."
+!This sentence needs to conclude the introduction!
+After that, the program code follows.
+ALL KEYWORDS EXCEPT FOR `OMG MOM GET OUTTA HERE` ARE CASE-INSENSTIVIE
+
+
+KEYWORDS.
+fap                     - increments the register pointed to by REGPTR by 1
+ugh                     - zeroes the value of the current register
+<kink>,fuck             - increments the register pointed to by REGPTR by the value of <kink> | IF USED ONCE, IT HAS A COOLDOWN OF 2^<KINK-2> FAPS
+<kink>,hnng             - increments the register pointed to by REGPTR by 2^<kink> |  IF USED ONCE, IT HAS A COOLDOWN OF 2^<KINK-1> FAPS
+yeah                    - increments REGPTR by 1
+yes                     - print the ASCII value of the current register
+oh                      - input an ASCII char into the current register
+OMGMOMGETOUTTAHERE      - immediately halts the program | MUST BE ALL UPPERCASE
+sigh                    - immediately halts the program
+squirt                  - equivalent to `yes yeah yes yeah yes yeah yes yeah yes yeah yes yeah`
+ngh <comment> hhh       - comment, will not be evaluated
+hrg <loop> mmf          - loop until current register is zero
