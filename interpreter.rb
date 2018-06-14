@@ -50,10 +50,10 @@ PRONOUNS={
 
 ->{
   _phrase = $CONTENT.shift.strip
-  if _phrase.match /^(Then|Suddenly)/
+  if _phrase.match /^(Then|Suddenly)\\s+the/
     _rxp=Regexp.new("^(Then|Suddenly)\\s+#{PRONOUNS[GENDER][:personal]}\\s+spot#{PRONOUNS[GENDER][:verb_suffix]}\\s+(.+)$", Regexp::MULTILINE)
     _m = _phrase.match _rxp
-    _m||abort("OOPS WRONG SYNTAX IN FOURTH INTRO SENTENCE")
+    _m||abort("OOPS WRONG SYNTAX IN FOURTH INTRO SENTENCE (#{_phrase.inspect})")
     $REGS[0] = 2**(KINKS.index(_m[2].downcase)+2)
   else
     $CONTENT.unshift _phrase
@@ -64,7 +64,7 @@ PRONOUNS={
   _phrase = $CONTENT.shift.strip
   _rxp=Regexp.new("^(Soon|Then|Suddenly)\\s+the\\s+following\\s+sounds\\s+become\\s+audible$", Regexp::MULTILINE)
   _m = _phrase.match _rxp
-  _m||abort("OOPS WRONG SYNTAX IN #{$REGS[0]==0 ? "FOURTH" : "FIFTH"} INTRO SENTENCE")
+  _m||abort("OOPS WRONG SYNTAX IN #{$REGS[0]==0 ? "FOURTH" : "FIFTH"} INTRO SENTENCE (#{_phrase.inspect})")
 }.call
 
 $CONTENT = $CONTENT.join(".").gsub(/ngh.+hhh/,"").gsub(/\s+/," ").strip.split
@@ -102,9 +102,25 @@ until $IPTR == $CONTENT.length
   when /^yes$/i
     putc $REGS[$REGPTR]
   when /^oh$/i
-    $REGS[$REGPTR] = gets.chomp[0]
+    $REGS[$REGPTR] = gets.chomp[0].ord
   when /^hrg$/i
-    $RETSTACK << $IPTR
+    unless $REGS[$REGPTR] == 0
+      $RETSTACK << $IPTR
+    else
+
+      ->{
+
+        _depth = $RETSTACK.length
+        _current = _depth+1
+        until _depth == _current
+          $IPTR += 1
+          $CONTENT[$IPTR].match(/^hrg$/i)&&(_current+=1;next)
+          $CONTENT[$IPTR].match(/^mmf$/i)&&(_current-=1;next)
+        end
+
+      }.call
+
+    end
   when /^mmf$/i
     $REGS[$REGPTR] == 0 ? $RETSTACK.pop : $IPTR=$RETSTACK[-1]
   when /^squirt$/i
